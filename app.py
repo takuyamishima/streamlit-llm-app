@@ -1,10 +1,9 @@
 import streamlit as st
-from dotenv import load_dotenv
 from langchain.chat_models import ChatOpenAI
 from langchain.schema import SystemMessage, HumanMessage
 
-# 環境変数の読み込み
-load_dotenv()
+# StreamlitのsecretsからAPIキーを取得
+OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
 
 # LLMからの回答を取得する関数
 def get_llm_response(input_text, expert_type):
@@ -17,7 +16,7 @@ def get_llm_response(input_text, expert_type):
     system_message = system_messages.get(expert_type, "あなたは一般的な専門家です。")
 
     # LangChainのChatOpenAIを使用して応答を生成
-    chat = ChatOpenAI(temperature=0.7)
+    chat = ChatOpenAI(api_key=OPENAI_API_KEY, temperature=0.7)
     messages = [
         SystemMessage(content=system_message),
         HumanMessage(content=input_text)
